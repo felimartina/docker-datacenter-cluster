@@ -44,7 +44,7 @@ if [ $response == "200" ]; then
 fi
 
 echo "Joining swarm"
-docker swarm join --token $WORKER_TOKEN ${MANAGER_SWARM_DNS}:2377
+docker swarm join --token $WORKER_TOKEN ${UCP_PUBLIC_ENDPOINT}:2377
 
 echo "Giving UCP time to finish registering the node"
 sleep 60s

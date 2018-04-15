@@ -48,7 +48,7 @@ else
     --host-address $NODE_PRIVATE_IP \
     --admin-username ${DOCKER_UCP_USERNAME} \
     --admin-password ${DOCKER_UCP_PASSWORD} \
-    --controller-port ${UCP_PORT}
+    --controller-port ${UCP_PORT} \
     --san ${UCP_PUBLIC_ENDPOINT} \
     --san ${ELB_MANAGER_NODES} 
 
