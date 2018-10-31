@@ -20,4 +20,4 @@ NODE_PUBLIC_IP=$(curl -s 169.254.169.254/latest/meta-data/public-ipv4)
 NODE_PRIVATE_IP=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 
 # join swarm
-docker swarm join --token $WORKER_TOKEN ${MANAGER_SWARM_DNS}:2377
+docker swarm join --token $WORKER_TOKEN ${MASTER_NODE_IP}:2377

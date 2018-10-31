@@ -83,7 +83,12 @@ variable "docker_ee_version" {
 
 variable "docker_ucp_version" {
   type    = "string"
-  default = "2.2.5"
+  default = "2.2.7"
+}
+
+variable "docker_dtr_version" {
+  type    = "string"
+  default = "2.4.3"
 }
 
 # VPC

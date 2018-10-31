@@ -1,0 +1,68 @@
+AWS_PROFILE = "pipe"
+
+aws_region = "us-west-2"
+
+global_tags = {
+  Owner       = "felipe.martina@outlook.com"
+  Provisioner = "Terraform"
+  Stage       = "dev"
+  Environment = "mywsl"
+  Service     = "ddc"
+  Instance    = "main"
+}
+
+availability_zones = ["us-west-2a", "us-west-2b"]
+
+service = "ddc"
+
+service_instance = "pipe"
+
+service_ip_whitelist = ["50.113.42.119/32"]
+
+ssh_key_name = "cloudcontrol" #"pipe"
+
+docker_ee_url = "https://storebits.docker.com/ee/ubuntu/sub-94fe14f0-eaca-4f65-a9b7-d5762791e9dd"
+
+hosted_zone_id = "ZOWKJFWYTH0Y5"
+
+domain = "mywsl.io"
+
+certificate_arn = "arn:aws:acm:us-west-2:437195794313:certificate/4bf39c70-5070-477a-a54d-498a45702733"
+
+dtr_subdomain = "dtr"
+
+ucp_subdomain = "ucp"
+
+ucp_password = "taekuondo3291"
+
+ucp_username = "pipe"
+
+ucp_https_port = "443"
+
+dtr_https_port = "4443"
+
+dtr_http_port = "80"
+
+worker_node_instance_type = "t2.micro"
+
+dtr_node_instance_type = "t2.micro"
+
+manager_node_instance_type = "t2.micro"
+
+worker_node_desired_count = "0"
+
+worker_node_max_count = "0"
+
+worker_node_min_count = "0"
+
+dtr_node_desired_count = "0"
+
+dtr_node_max_count = "0"
+
+dtr_node_min_count = "0"
+
+manager_node_desired_count = "1"
+
+manager_node_max_count = "1"
+
+manager_node_min_count = "1"

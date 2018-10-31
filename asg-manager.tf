@@ -12,10 +12,7 @@ module "node-manager-asg" {
   security_groups      = ["${aws_security_group.swarm_node.id}", "${aws_security_group.manager_node.id}", "${aws_security_group.admin.id}"]
 
   target_group_arns = "${list(
-      aws_lb_target_group.ucp_lb_https_tg.arn,
-      aws_lb_target_group.manager_nodes_2377_tg.arn,
-      aws_lb_target_group.manager_nodes_7946_tg.arn,
-      aws_lb_target_group.manager_nodes_4789_tg.arn
+      aws_lb_target_group.ucp_lb_https_tg.arn
     )}"
 
   root_block_device = [

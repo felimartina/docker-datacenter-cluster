@@ -4,6 +4,7 @@ ${DOCKER_INSTALL}
 
 NODE_PUBLIC_IP=$(curl -s 169.254.169.254/latest/meta-data/public-ipv4)
 NODE_PRIVATE_IP=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 
 # We need to check whether this is the first manager or no
 # If this is the first manager, then we need to install it, otherwise just join
@@ -26,7 +27,7 @@ if [ $response == "200" ]; then
   MANAGER_TOKEN=$(cat ~/join-token.txt)
 
   # join swarm
-  docker swarm join --token $MANAGER_TOKEN ${MANAGER_SWARM_DNS}:2377
+  docker swarm join --token $MANAGER_TOKEN ${MASTER_NODE_IP}:2377
     
   docker container run --rm -t --name ucp \
     -v /var/run/docker.sock:/var/run/docker.sock \
@@ -40,8 +41,11 @@ if [ $response == "200" ]; then
 
 else
 
-  echo "This should be the first manager"
-  # Install ddc
+  echo "Assigning master IP to this node"
+  aws ec2 associate-address --instance-id $INSTANCE_ID --allocation-id ${MASTER_NODE_EIP_ID} --region ${REGION}
+  sleep 120s
+
+  echo "Installing UCP"
   docker container run --rm -t --name ucp \
     -v /var/run/docker.sock:/var/run/docker.sock \
     docker/ucp:${DOCKER_UCP_VERSION} install \
@@ -50,7 +54,8 @@ else
     --admin-password ${DOCKER_UCP_PASSWORD} \
     --controller-port ${UCP_PORT} \
     --san ${UCP_PUBLIC_ENDPOINT} \
-    --san ${ELB_MANAGER_NODES} 
+    --san ${ELB_MANAGER_NODES} \
+    --san ${MASTER_NODE_IP}
 
   # Upload manager and worker tokens to S3
   docker swarm join-token -q worker > ~/worker-token.txt

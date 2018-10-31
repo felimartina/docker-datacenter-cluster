@@ -44,7 +44,7 @@ if [ $response == "200" ]; then
 fi
 
 echo "Joining swarm"
-docker swarm join --token $WORKER_TOKEN ${UCP_PUBLIC_ENDPOINT}:2377
+docker swarm join --token $WORKER_TOKEN ${MASTER_NODE_IP}:2377
 
 echo "Giving UCP time to finish registering the node"
 sleep 60s
@@ -58,7 +58,7 @@ if [ $dtr_running == "1" ]; then
 
   echo "Joining existing DTR"
 
-  docker run -t --rm docker/dtr join \
+  docker run -t --rm docker/dtr:{DOCKER_DTR_VERSION} join \
     --existing-replica-id ${DTR_REPLICA_ID} \
     --ucp-username ${DOCKER_UCP_USERNAME} \
     --ucp-password ${DOCKER_UCP_PASSWORD} \
@@ -72,15 +72,24 @@ else
 
   echo "Installing DTR"
 
-  docker run -t --rm docker/dtr install \
+  docker run -t --rm docker/dtr:${DOCKER_DTR_VERSION} \
+    install \
     --dtr-external-url https://${DTR_PUBLIC_ENDPOINT} \
     --replica-id ${DTR_REPLICA_ID} \
     --ucp-username ${DOCKER_UCP_USERNAME} \
     --ucp-password ${DOCKER_UCP_PASSWORD} \
     --ucp-node $(hostname) \
-    --ucp-url https://${UCP_PUBLIC_ENDPOINT} \
+    --ucp-url https://${MASTER_NODE_IP} \
     --ucp-ca "$(cat ucp-ca.pem)" \
     --replica-http-port ${DTR_HTTP_PORT} \
-    --replica-https-port ${DTR_HTTPS_PORT}
+    --replica-https-port ${DTR_HTTPS_PORT} \
+    --debug
 
+  docker run -t --rm docker/dtr:${DOCKER_DTR_VERSION} \
+    reconfigure \
+    --ucp-url https://${UCP_PUBLIC_ENDPOINT} \
+    --existing-replica-id ${DTR_REPLICA_ID} \
+    --ucp-username ${DOCKER_UCP_USERNAME} \
+    --ucp-password ${DOCKER_UCP_PASSWORD} \
+    --debug
 fi

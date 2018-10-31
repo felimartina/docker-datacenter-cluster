@@ -13,10 +13,7 @@ module "node-dtr-asg" {
 
   target_group_arns = "${list(
       aws_lb_target_group.dtr_lb_http_tg.arn,
-      aws_lb_target_group.dtr_lb_https_tg.arn,
-      aws_lb_target_group.manager_nodes_2377_tg.arn,
-      aws_lb_target_group.manager_nodes_7946_tg.arn,
-      aws_lb_target_group.manager_nodes_4789_tg.arn
+      aws_lb_target_group.dtr_lb_https_tg.arn
     )}"
 
   root_block_device = [

@@ -1,3 +1,9 @@
+resource "aws_eip" "master" {
+  vpc        = true
+  tags       = "${merge(var.global_tags, map("Name","${var.service}-${var.service_instance}-master-eip"))}"
+  depends_on = ["module.vpc"]
+}
+
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
